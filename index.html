@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+	<title>导航</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<header></header>
+	<main>
+
+     <div id='wrapper'>
+
+     </div>
+
+	</main>
+	<footer></footer>
+	<script type="text/javascript">
+		
+	
+		// 1.初始化数据
+		var hashA = init();
+		keys = hashA.kk;
+		hash = hashA.hh;
+   	
+		// 2.生成键盘
+		for(var index = 0;index < keys.length;index++){ //遍历keys生成 a-z、图片、按钮、
+			var div = tag('div',{className:'row'});
+		
+			var row = keys[index]; 	                   // 行
+
+			for(var index2 = 0;index2 < row.length;index2++){
+				var a_z = row[index2];
+				var kbd = tag('kbd',{className:'column'});
+
+				var span = tag('span');
+				span.textContent = a_z; 	//赋值a-z
+
+				var button = tag('button',{id:a_z});
+				button.textContent = '编辑';
+				
+				var img = tag('img');
+				if(hash[a_z]){  		//若存favicon则显示，没有则显示点
+					img.src = 'http://' + hash[a_z] + '/favicon.ico';			
+				}else{
+					img.src = 'dian.webp';
+				}
+				img.onerror = function(sdffs){ 		//抓取失败,显示点
+					sdffs.target.src = 'dian.webp';
+				}
+				
+				button.onclick = function(fsaddsad){
+					var imgRe = fsaddsad.target.previousSibling; // img标签
+					var key = fsaddsad['target']['id'];	//键值 q w e r
+					var inputRe = prompt('输入网站'); 	//输入	
+					hash[key] = inputRe;
+					imgRe.src = 'http://' + inputRe + '/favicon.ico';
+					localStorage.setItem('zzz',JSON.stringify(hash));//缓存
+			}
+				kbd.appendChild(span);
+				kbd.appendChild(img);
+				kbd.appendChild(button);
+				div.appendChild(kbd);
+				wrapper.appendChild(div);
+			}		
+		}
+		// 3.监听键盘
+		document.onkeypress = function(kkk){
+				input = kkk.key;
+				website = hash[input];
+				location.href = 'http://' + website;
+				//window.open('http://' + website)
+		}
+
+		function init(){
+				var keys = [
+				    ['q','w','e','r','t','y','u','i','o','p'],
+					['a','s','d','f','g','h','j','k','l'],
+					['z','x','c','v','b','n','m']
+					];	
+				var hash = {
+					q: 'qunar.com',
+					w: 'weibo.com',
+					e: 'elerm.com',
+					r: 'tieba.com',
+					t: 'tianqi.com',
+					z: 'zhihu.com',
+					m: 'mcdonalds.com.cn',
+					y: undefined,
+				};
+				var hasInLocalStorage = getFromLocalStorage('zzz'); //取出LocalStorage中的zzz
+				if(hasInLocalStorage){
+					hash = hasInLocalStorage;
+				}
+					return{
+						'kk':keys,
+						'hh':hash
+					}
+		
+			}
+		function getFromLocalStorage(name){   //取出localStorage中的name
+				return JSON.parse(localStorage.getItem('name'||'null'))
+			}
+
+		function tag(tagName,attributes){
+	   			var element = document.createElement(tagName);
+	   			for(var key in attributes){
+	   				element[key] = attributes[key];
+	   			}
+	   			return element
+	   		}
+
+
+	</script>
+</body>
+</html>
